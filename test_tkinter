@@ -1,29 +1,30 @@
 import tkinter as tk
-import json
+import json 
+import calendar
+import datetime
 
 
-with open("agenda.json" ,"r") as calendar:
-      agenda=json.load(calendar)
+with open("agenda.json" ,"r") as fichier:
+      agenda=json.load(fichier)
 def tache (date):
+        global champ_tache
+        global jour
         tache_affiche=""
         if date in agenda :
                 for i,j in enumerate(agenda[date]) :
                          tache_affiche+=f"{i+1}-{j}\n"
                 sms.config(text=tache_affiche)
                 global spin_supprimer
-                spin_supprimer = tk.Spinbox(fenetre, from_=1, to=len(agenda[date]))
+                spin_supprimer = tk.Spinbox(fenetre,bg="#2b2b2b",fg="#ffffff", from_=1, to=len(agenda[date],))
                 spin_supprimer.grid(row=9, column=0)
+                supprimer.grid(row=9,column=1,sticky="w",pady=5)
         else :
                 sms.config(text="Aucune tache n'est prevu pour cette date . Souhaiteriez vous en ajoutez une ??? ")
-        global jour
         jour=date
-        global champ_tache
-        champ_tache=tk.Entry(fenetre)
-        champ_tache.grid(row=7,column=0, columnspan=7,sticky="w")
-        ajout=tk.Button(fenetre,text="Ajouter",command= lambda :ajout_tache())
-        ajout.grid(row=8,column=8,sticky="e")
-        supprimer=tk.Button(fenetre,text="Supprimer",command= lambda :supprimer_tache())
-        supprimer.grid(row=9,column=8,sticky="w")
+        champ_tache.grid(row=7,column=0, columnspan=7,sticky="w",padx=(0,5),pady=5)
+        ajout.grid(row=8,column=6,sticky="e",pady=5)
+        
+
 
 
 def ajout_tache() :
@@ -37,8 +38,8 @@ def ajout_tache() :
                 tache_affiche+=f"{i+1}-{j}\n"
         sms.config(text=f"{tache_affiche}")
         champ_tache.delete(0,tk.END)
-        with open("agenda.json" ,"w" ) as calendar :
-                 json.dump(agenda,calendar)  
+        with open("agenda.json" ,"w" ) as fichier :
+                 json.dump(agenda, fichier)  
         spin_supprimer.config(to=len(agenda[jour]))
 
 
@@ -51,24 +52,92 @@ def supprimer_tache() :
         for i,j in enumerate(agenda[jour]) :
                 tache_affiche+=f"{i+1}-{j}\n"
         sms.config(text=f"{tache_affiche}")
-        with open("agenda.json" ,"w" ) as calendar :
-                 json.dump(agenda,calendar)
+        with open("agenda.json" ,"w" ) as fichier :
+                 json.dump(agenda,fichier)
         spin_supprimer.config(to=len(agenda[jour]))
-
+def create():
+        global list_button
+        global spin_mois
+        global spin_annee
+        mois=int(spin_mois.get())
+        annee=int(spin_annee.get())
+        for i in list_button :
+                i.destroy()
+        list_button=[]     
+        spin_mois.destroy()
+        spin_mois = tk.Spinbox(fenetre, from_=1, to=12,bg="#2b2b2b",fg="#ffffff",width=5)
+        spin_mois.grid(row=11, column=1,padx=5,pady=5)
+        spin_mois.delete(0, tk.END)
+        spin_mois.insert(0, str(mois))
+        spin_annee.destroy()
+        spin_annee = tk.Spinbox(fenetre, from_=1, to=int(datetime.datetime.now().year))
+        spin_annee.grid(row=14, column=0)
+        spin_annee.delete(0, tk.END)
+        spin_annee.insert(0, str(annee))
+        list_button=[]
+        jour1, nb_jour = calendar.monthrange(annee,mois)
+        for i in range(nb_jour) : 
+                 bouton= tk.Button(fenetre, text=f"{i+1}",bg="#1e1d1d2b",fg="#white",width=4 ,command= lambda x=i:tache(f"{x+1}-{mois:02d}-{annee:04d}"))
+                 j=i+jour1
+                 bouton.grid(row=j//7, column=j%7,padx=2,pady=2)
+                 list_button.append(bouton)
+                 
           
-        
 fenetre = tk.Tk()          
 fenetre.title("Mon Agenda") 
+fenetre.config(bg="#1D1B1B")
 
 t=1
-for i in range(31) : 
-            bouton= tk.Button(fenetre, text=f"{i+1}", command= lambda x=i:tache(f"{x+1}-07-2026"))
-            bouton.grid(row=i//7, column=i%7)
+label_mois = tk.Label(fenetre, text="Mois :", bg="#2b2b2b", fg="#ffffff")
+label_mois.grid(row=11, column=0, sticky="e", padx=5, pady=5)
+spin_mois = tk.Spinbox(fenetre, from_=1, to=12,bg="#2b2b2b",fg="#ffffff",width=5)
+spin_mois.grid(row=12, column=0,padx=5,pady=5)
+spin_mois.delete(0, tk.END)
+spin_mois.insert(0, str(datetime.datetime.now().month))
+
+annee_current=int(datetime.datetime.now().year)
+
+label_annee = tk.Label(fenetre, text="Annee :", bg="#2b2b2b", fg="#ffffff")
+label_annee.grid(row=11, column=2, sticky="e", padx=5, pady=5)
+
+annee_current = int(datetime.datetime.now().year)
+
+spin_annee = tk.Spinbox(fenetre, from_=1, to=int(annee_current), bg="#2b2b2b", fg="#ffffff", width=8)
+spin_annee.grid(row=11, column=3, sticky="w", padx=5, pady=5)
+spin_annee.delete(0, tk.END)
+spin_annee.insert(0, str(annee_current))
+
+generer = tk.Button(fenetre, text="Generer", bg="#2b2b2b", fg="#ffffff", command=lambda: create())
+generer.grid(row=11, column=4, sticky="w", padx=5, pady=5)
+
+mois = int(spin_mois.get())
+annee = int(spin_annee.get())
+            
+jour1, nb_jour = calendar.monthrange(annee,mois)
+
+list_button=[]
+for i in range(nb_jour) :
+            bouton= tk.Button(fenetre, text=f"{i+1}",bg="#494848",fg="#ffffff",width=4,command= lambda x=i:tache(f"{x+1}-{mois:02d}-{annee:04d}"))
+            j=i+jour1
+            bouton.grid(row=j//7, column=j%7,padx=2,pady=2)
+            list_button.append(bouton)
 
 jour=" "
-sms=tk.Label(fenetre, text=" ")
-sms.grid(row=6 , column=5,columnspan=7, sticky="w" )
-    
+sms = tk.Label(fenetre, text=" ", bg="#2b2b2b", fg="#ffffff", justify="left", anchor="w")
+sms.grid(row=6, column=0, columnspan=7, sticky="w", padx=5, pady=(10, 5))
+champ_tache = tk.Entry(fenetre, bg="#2b2b2b", fg="#ffffff", insertbackground="white")
+ajout=tk.Button(fenetre,text="Ajouter",bg="#2b2b2b", fg="#ffffff",command= lambda :ajout_tache())
+supprimer=tk.Button(fenetre,text="Supprimer",bg="#2b2b2b", fg="#ffffff",command= lambda :supprimer_tache())
+
+mois=int(spin_mois.get())
+annee=int(spin_annee.get())
+
+
+                 
+
+
 fenetre.mainloop()   
-with open("agenda.json" ,"w" ) as calendar :
-      json.dump(agenda,calendar)       
+with open("agenda.json" ,"w" ) as fichier :
+      json.dump(agenda,fichier)      
+
+        
