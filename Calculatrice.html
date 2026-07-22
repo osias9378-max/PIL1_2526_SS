@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculatrice</title>
+    <style>
+        .fond{
+            background-color: rgb(18, 18, 50);
+        }
+        .clavier-basique{
+            background-color: rgb(120, 117, 129);
+            display: grid;
+            grid-template-columns: repeat(5,1fr);
+            gap: 8px;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            margin:  0px 30% 0px 30%;
+
+            width: 45%;
+
+     
+        }
+        .clavier-avancer{
+            background-color: rgb(120, 117, 129);
+            display: grid;
+            grid-template-columns: repeat(7,1fr);
+            gap: 8px;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            margin:  0px 30% 0px 30%;
+            width: 100%;
+         
+        }
+        .egal{
+            grid-column: span 2;
+        }
+        .page{
+            display: none;
+        }
+        .page.active{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 300px;
+        }
+        .menu-flottant {
+             position: absolute;
+             background: #9c9c9d;
+             border-radius: 8px;
+             padding: 8px;
+             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+             width: 50px;
+        }
+        .menu-flottant div {
+             padding: 10px;
+             color: rgb(90, 88, 88);
+             cursor: pointer;
+        }
+        .menu-flottant div:hover {
+             background: #c22a2a;
+        }
+        .Entrer input{
+            width: 300%;
+            margin-right: 20%;
+        }
+       
+        
+    </style>
+</head>
+<body>
+    <br>
+    <select onchange="changerPage(this.value)">
+         <option value="Basique">Basique</option>
+         <option value="Avance">Avance</option>
+         <option value="Graphes">Graphes</option>
+    </select>
+    <div class="Basique page active"> 
+             <div class="ecran">
+                    <canvas></canvas>
+             </div>
+             <div class="Entrer">
+                 <input type="text" id="ecran" readonly>
+             </div>
+            <br>
+            <div class="clavier-basique">                  
+                    <button>AC</button>
+                    <button>(</button>
+                    <button>)</button>
+                    <button>mod</button>
+                    <button>π</button>
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                    <button>x</button>
+                    <button>√</button>                    
+                    <button>4</button>      
+                    <button>5</button>
+                    <button>6</button>
+                    <button>÷</button>
+                    <button>x<sup>2</sup></button>
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>  
+                    <button>⁻</button>  
+                    <button>.</button>
+                    <button>0</button>
+                    <button>+</button>    
+                    <button>%</button>
+                    <button class="egal">=</button>
+            </div>
+
+    </div>
+        <div class="Avance page"> 
+             <div class="Entrer">
+                 <input type="text" id="ecran" readonly>
+             </div>
+            <br>
+            <div class="clavier-avancer">
+                     <button>AC</button>
+                    <button>(</button>
+                    <button>)</button>
+                    <button>mod</button>
+                    <button>π</button>
+                    <button>x<sup>y</sup></button>
+                    <button>x10<sup>y</sup></button>
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                    <button>x</button>
+                    <button>√</button>  
+                    <button>x<sup>-1</sup></button>
+                    <button>x!</button>                  
+                    <button>4</button>      
+                    <button>5</button>
+                    <button>6</button>
+                    <button>÷</button>
+                    <button>x<sup>2</sup></button>
+                    <button>|x|</button>
+                    <button>cos</button>
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>  
+                    <button>⁻</button>  
+                    <button>.</button>
+                    <button>sin</button>
+                    <button>tan</button>
+                    <button>0</button>
+                    <button>+</button>    
+                    <button>%</button>
+                    <button class="egal">=</button>
+                    <button>e</button>
+                    <button>ln</button>
+                    <button onclick="toggleFonctions()">f(x)</button>
+                    <div id="menu-fonctions" class="menu-flottant" style="display:none">
+                         <button onclick="fonction('sinh')">sinh(x)</button>
+                         <button onclick="fonction('cosh')">cosh(x)</button>
+                         <button onclick="fonction('tanh')">tanh(x)</button>
+                         <button onclick="fonction('log')">log(x)</button>
+                         <button onclick="fonction('ⁿ√')">ⁿ√(x)</button>
+                         <button onclick="fonction('arg')">arg(x)</button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+    </div>
+        <div class="Graphes page"> 
+            <br>
+            <div class="clavier">
+                <div class="ecran">
+
+                </div>
+                <button>basique</button>
+                <div>
+                    <div>Avance</div>
+                    <div>Tracer</div>                    
+                </div>
+                <div>
+                    <canvas></canvas>
+                </div>
+                <div>
+                     <input type="text" id="ecran" readonly>
+                </div>
+                <button>tracer</button>
+
+            </div>
+
+    </div>
+
+    <script>
+        function ajouterChiffre(chiffre) {
+            document.getElementById("ecran").value += chiffre;
+        }
+        function changerPage(nomPage) {
+              console.log("Fonction appelée avec :", nomPage);
+              document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+              document.querySelector('.' + nomPage).classList.add('active');
+        }
+        function toggleFonctions() {
+              let menu = document.getElementById('menu-fonctions');
+              menu.style.display = (menu.style.display === "none") ? "block" : "none";
+       }
+    </script>
+</body>
+</html>
