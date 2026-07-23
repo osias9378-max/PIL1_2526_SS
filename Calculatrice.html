@@ -16,9 +16,7 @@
             border-radius: 10px;
             padding: 10px;
             font-size: 16px;
-            margin:  0px 30% 0px 30%;
-
-            width: 45%;
+            width: 700px;
 
      
         }
@@ -32,8 +30,7 @@
             border-radius: 10px;
             padding: 10px;
             font-size: 16px;
-            margin:  0px 30% 0px 30%;
-            width: 100%;
+            width: 700px;
          
         }
         .egal{
@@ -46,7 +43,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 300px;
+            justify-content: center;
+            height: 100vh;
+            padding-bottom: 10%;
         }
         .menu-flottant {
              position: absolute;
@@ -64,9 +63,17 @@
         .menu-flottant div:hover {
              background: #c22a2a;
         }
-        .Entrer input{
-            width: 300%;
-            margin-right: 20%;
+
+        .Tracer{
+            margin-left: 90%;
+        }
+        
+        .affichage{
+            background-color: #c1c1c6;
+            width: 700px;
+            border-radius: 5px;
+            padding: 12px;
+            margin: 5px;
         }
        
         
@@ -81,53 +88,85 @@
     </select>
     <div class="Basique page active"> 
              <div class="ecran">
-                    <canvas></canvas>
-             </div>
-             <div class="Entrer">
-                 <input type="text" id="ecran" readonly>
+                <div class="affichage"></div>
              </div>
             <br>
             <div class="clavier-basique">                  
-                    <button>AC</button>
-                    <button>(</button>
-                    <button>)</button>
-                    <button>mod</button>
-                    <button>π</button>
-                    <button>7</button>
-                    <button>8</button>
-                    <button>9</button>
-                    <button>x</button>
-                    <button>√</button>                    
-                    <button>4</button>      
-                    <button>5</button>
-                    <button>6</button>
-                    <button>÷</button>
-                    <button>x<sup>2</sup></button>
-                    <button>1</button>
-                    <button>2</button>
-                    <button>3</button>  
-                    <button>⁻</button>  
-                    <button>.</button>
-                    <button>0</button>
-                    <button>+</button>    
-                    <button>%</button>
-                    <button class="egal">=</button>
+                    <button onclick="effacer()">AC</button>
+                    <button onclick="ajouter('(')">(</button>
+                    <button onclick="ajouter(')')">)</button>
+                    <button onclick="ajouter('%')">mod</button>
+                    <button onclick="ajouter('Math.PI')">π</button>
+                    <button onclick="ajouter('7')">7</button>
+                    <button onclick="ajouter('8')">8</button>
+                    <button onclick="ajouter('9')">9</button>
+                    <button onclick="ajouter('*')">x</button>
+                    <button onclick="ajouter('Math.sqrt(')">√</button>
+                    <button onclick="ajouter('4')">4</button>
+                    <button onclick="ajouter('5')">5</button>
+                    <button onclick="ajouter('6')">6</button>
+                    <button onclick="ajouter('/')">÷</button>
+                    <button onclick="ajouter('**2')">x²</button>
+                    <button onclick="ajouter('1')">1</button>
+                    <button onclick="ajouter('2')">2</button>
+                    <button onclick="ajouter('3')">3</button>
+                    <button onclick="ajouter('-')">-</button>
+                    <button onclick="ajouter('.')">.</button>
+                    <button onclick="ajouter('+')">+</button>
+                    <button onclick="ajouter('/100')">%</button>
+                    <button onclick="calculer()" class="egal">=</button>
             </div>
 
     </div>
         <div class="Avance page"> 
              <div class="Entrer">
-                 <input type="text" id="ecran" readonly>
+                 <input type="text" id="ecran-avance" readonly>
              </div>
             <br>
             <div class="clavier-avancer">
-                     <button>AC</button>
-                    <button>(</button>
-                    <button>)</button>
+                    <button onclick="effacer()">AC</button>
+                    <button onclick="ajouter('(')">(</button>
+                    <button onclick="ajouter(')')">)</button>
+                    <button onclick="ajouter('%')">mod</button>
+                    <button onclick="ajouter('Math.PI')">π</button>
+                    <button onclick="ajouter('7')">7</button>
+                    <button onclick="ajouter('8')">8</button>
+                    <button onclick="ajouter('9')">9</button>
+                    <button onclick="ajouter('*')">x</button>
+                    <button onclick="ajouter('Math.sqrt(')">√</button>
+                    <button onclick="ajouter('4')">4</button>
+                    <button onclick="ajouter('5')">5</button>
+                    <button onclick="ajouter('6')">6</button>
+                    <button onclick="ajouter('/')">÷</button>
+                    <button onclick="ajouter('**2')">x²</button>
+                    <button onclick="ajouter('1')">1</button>
+                    <button onclick="ajouter('2')">2</button>
+                    <button onclick="ajouter('3')">3</button>
+                    <button onclick="ajouter('-')">-</button>
+                    <button onclick="ajouter('.')">.</button>
+                    <button onclick="ajouter('+')">+</button>
+                    <button onclick="ajouter('/100')">%</button>
+                    <button onclick="calculer()" class="egal">=</button>
+
+
                     <button>mod</button>
                     <button>π</button>
                     <button>x<sup>y</sup></button>
                     <button>x10<sup>y</sup></button>
+                    <button onclick="ajouter('7')">7</button>
+                    <button onclick="ajouter('8')">8</button>
+                    <button onclick="ajouter('9')">9</button>
+                    <button onclick="ajouter('x')">x</button>
+                    <button onclick="ajouter(')')"></button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+                    <button onclick="ajouter(')')">(</button>
+
                     <button>7</button>
                     <button>8</button>
                     <button>9</button>
@@ -175,26 +214,19 @@
             <br>
             <div class="clavier">
                 <div class="ecran">
-
-                </div>
-                <button>basique</button>
-                <div>
-                    <div>Avance</div>
-                    <div>Tracer</div>                    
-                </div>
-                <div>
                     <canvas></canvas>
                 </div>
-                <div>
-                     <input type="text" id="ecran" readonly>
+                <div class="Entrer">
+                     <input type="text" id="ecran-graphe" readonly>
                 </div>
-                <button>tracer</button>
+                <button class="Tracer">tracer</button>
 
             </div>
 
     </div>
 
     <script>
+        console.log(8.3)
         function ajouterChiffre(chiffre) {
             document.getElementById("ecran").value += chiffre;
         }
@@ -207,6 +239,48 @@
               let menu = document.getElementById('menu-fonctions');
               menu.style.display = (menu.style.display === "none") ? "block" : "none";
        }
+        let expressionCalcul="";
+        let expressionCalculAfficher=""
+        function ajouter(valeur) {
+             expressionCalcul += valeur;
+             let pageActive = document.querySelector('.page.active');
+             pageActive.querySelector('.affichage').textContent = formatAffichage(expressionCalcul);
+        }
+
+        function effacer() {
+             expressionCalcul = "";
+             let pageActive = document.querySelector('.page.active');
+             pageActive.querySelector('.affichage').textContent = "";
+        }
+
+        function calculer() {
+             let resultat = eval(expressionCalcul);
+             let pageActive = document.querySelector('.page.active');
+             pageActive.querySelector('.affichage').textContent = resultat;
+             expressionCalcul = resultat.toString();
+        }
+
+        let correspondances = {
+             "Math.PI": "π",
+             "Math.sqrt(": "√(",
+             "Math.sin(": "sin(",
+             "Math.cos(": "cos(",
+             "Math.tan(": "tan(",
+             "Math.log(": "log(",
+             "**2": "²",
+        };
+
+        function formatAffichage(expr) {
+             for (let cle in correspondances) {
+                 expr = expr.replaceAll(cle, correspondances[cle]);
+                }
+             return expr;
+        }
+
+        window.onload = function() {
+             let selectMenu = document.querySelector('select');
+             changerPage(selectMenu.value);
+        }
     </script>
 </body>
 </html>
