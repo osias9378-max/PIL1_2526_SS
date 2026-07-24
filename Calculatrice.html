@@ -100,10 +100,10 @@
                     <button onclick="ajouter('7')">7</button>
                     <button onclick="ajouter('8')">8</button>
                     <button onclick="ajouter('9')">9</button>
-                    <button onclick="ajouter('*')">x</button>
+                    <button onclick="ajouter('*')">×</button>
                     <button onclick="ajouter('Math.sqrt(')">√</button>
                     <button onclick="ajouter('4')">4</button>
-                    <button onclick="ajouter('5')">5</button>
+                    <button onclick="appliquer_factorielle()">fact(x)</button>
                     <button onclick="ajouter('6')">6</button>
                     <button onclick="ajouter('/')">÷</button>
                     <button onclick="ajouter('**2')">x²</button>
@@ -112,6 +112,7 @@
                     <button onclick="ajouter('3')">3</button>
                     <button onclick="ajouter('-')">-</button>
                     <button onclick="ajouter('.')">.</button>
+                    <button onclick="ajouter('0')">0</button>
                     <button onclick="ajouter('+')">+</button>
                     <button onclick="ajouter('/100')">%</button>
                     <button onclick="calculer()" class="egal">=</button>
@@ -119,8 +120,8 @@
 
     </div>
         <div class="Avance page"> 
-             <div class="Entrer">
-                 <input type="text" id="ecran-avance" readonly>
+             <div class="ecran">
+                 <div class="affichage"></div>
              </div>
             <br>
             <div class="clavier-avancer">
@@ -129,79 +130,48 @@
                     <button onclick="ajouter(')')">)</button>
                     <button onclick="ajouter('%')">mod</button>
                     <button onclick="ajouter('Math.PI')">π</button>
+                    <button onclick="ajouter('**')">x^y</button>
+                    <button onclick="ajouter('*10**')">×10^</button>
                     <button onclick="ajouter('7')">7</button>
                     <button onclick="ajouter('8')">8</button>
                     <button onclick="ajouter('9')">9</button>
-                    <button onclick="ajouter('*')">x</button>
+                    <button onclick="ajouter('*')">×</button>
                     <button onclick="ajouter('Math.sqrt(')">√</button>
+                    <button onclick="ajouter('**-1')">x^-1</button>
+                    <button onclick="ajouter('fact(')">fact(</button>
                     <button onclick="ajouter('4')">4</button>
                     <button onclick="ajouter('5')">5</button>
                     <button onclick="ajouter('6')">6</button>
                     <button onclick="ajouter('/')">÷</button>
                     <button onclick="ajouter('**2')">x²</button>
+                    <button onclick="ajouter('Math.abs(')">|x|</button>
+                    <button onclick="ajouter('Math.cos(')">cos(</button>
                     <button onclick="ajouter('1')">1</button>
                     <button onclick="ajouter('2')">2</button>
                     <button onclick="ajouter('3')">3</button>
                     <button onclick="ajouter('-')">-</button>
                     <button onclick="ajouter('.')">.</button>
+                    <button onclick="ajouter('Math.sin(')">sin(</button>
+                    <button onclick="ajouter('Math.tan(')">tan(</button>
+                    <button onclick="ajouter('0')">0</button>
                     <button onclick="ajouter('+')">+</button>
                     <button onclick="ajouter('/100')">%</button>
+
                     <button onclick="calculer()" class="egal">=</button>
-
-
-                    <button>mod</button>
-                    <button>π</button>
-                    <button>x<sup>y</sup></button>
-                    <button>x10<sup>y</sup></button>
-                    <button onclick="ajouter('7')">7</button>
-                    <button onclick="ajouter('8')">8</button>
-                    <button onclick="ajouter('9')">9</button>
-                    <button onclick="ajouter('x')">x</button>
-                    <button onclick="ajouter(')')"></button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-                    <button onclick="ajouter(')')">(</button>
-
-                    <button>7</button>
-                    <button>8</button>
-                    <button>9</button>
-                    <button>x</button>
-                    <button>√</button>  
-                    <button>x<sup>-1</sup></button>
-                    <button>x!</button>                  
-                    <button>4</button>      
-                    <button>5</button>
-                    <button>6</button>
-                    <button>÷</button>
-                    <button>x<sup>2</sup></button>
-                    <button>|x|</button>
-                    <button>cos</button>
-                    <button>1</button>
-                    <button>2</button>
-                    <button>3</button>  
-                    <button>⁻</button>  
-                    <button>.</button>
-                    <button>sin</button>
-                    <button>tan</button>
-                    <button>0</button>
-                    <button>+</button>    
-                    <button>%</button>
-                    <button class="egal">=</button>
-                    <button>e</button>
-                    <button>ln</button>
+                    <button onclick="ajouter('Math.exp(')">exp(x)</button>
+                    <button onclick="ajouter('Math.log(')">ln(x)</button>
                     <button onclick="toggleFonctions()">f(x)</button>
-                    <div id="menu-fonctions" class="menu-flottant" style="display:none">
-                         <button onclick="fonction('sinh')">sinh(x)</button>
-                         <button onclick="fonction('cosh')">cosh(x)</button>
-                         <button onclick="fonction('tanh')">tanh(x)</button>
-                         <button onclick="fonction('log')">log(x)</button>
-                         <button onclick="fonction('ⁿ√')">ⁿ√(x)</button>
-                         <button onclick="fonction('arg')">arg(x)</button>
+                    <div id="menu-ajouter" class="menu-flottant" style="display:none">
+                         <button onclick="ajouter('Math.sinh')">sinh(x)</button>
+                         <button onclick="ajouter('Math.cosh(')">cosh(x)</button>
+                         <button onclick="ajouter('Math.tanh(')">tanh(x)</button>
+                         <button onclick="ajouter('Math.log10(')">log(x)</button>
+                         <button onclick="ajouter('Math.asin(')">asin(</button>
+                         <button onclick="ajouter('Math.acos(')">acos(</button>
+                         <button onclick="ajouter('Math.atan(')">atan(</button>
+
+
+
                     </div>
 
                 </div>
@@ -226,9 +196,19 @@
     </div>
 
     <script>
-        console.log(8.3)
-        function ajouterChiffre(chiffre) {
-            document.getElementById("ecran").value += chiffre;
+        let calcul;
+        console.log()
+        function fact(n) {
+             let resultat = 1;
+             for (let i = 2; i <= n; i++) {
+                 resultat *= i;
+        }
+        return resultat
+        }
+
+        window.onload = function() {
+             let selectMenu = document.querySelector('select');
+             changerPage(selectMenu.value);
         }
         function changerPage(nomPage) {
               console.log("Fonction appelée avec :", nomPage);
@@ -236,16 +216,21 @@
               document.querySelector('.' + nomPage).classList.add('active');
         }
         function toggleFonctions() {
-              let menu = document.getElementById('menu-fonctions');
+              let menu = document.getElementById('menu-ajouter');
               menu.style.display = (menu.style.display === "none") ? "block" : "none";
        }
         let expressionCalcul="";
         let expressionCalculAfficher=""
         function ajouter(valeur) {
+            if (calcul==1) {
+                expressionCalcul=""
+            }
              expressionCalcul += valeur;
              let pageActive = document.querySelector('.page.active');
              pageActive.querySelector('.affichage').textContent = formatAffichage(expressionCalcul);
+             calcul=0;
         }
+        
 
         function effacer() {
              expressionCalcul = "";
@@ -258,6 +243,7 @@
              let pageActive = document.querySelector('.page.active');
              pageActive.querySelector('.affichage').textContent = resultat;
              expressionCalcul = resultat.toString();
+             calcul=1;
         }
 
         let correspondances = {
@@ -266,10 +252,24 @@
              "Math.sin(": "sin(",
              "Math.cos(": "cos(",
              "Math.tan(": "tan(",
-             "Math.log(": "log(",
+             "Math.log10(": "log(",
+             "Math.log(": "ln(",
+             "Math.asin(": "asin(",
+             "Math.acos(": "acos(",
+             "Math.sinh(": "sinh(",
+             "Math.cosh(": "cosh(",
+             "Math.tanh(": "tanh(",
              "**2": "²",
+             "**": "^",
+             "**-1": "^-1",
+             "*10**": "×10^",
+             "%": "mod",
+             "*": "×",
+             "/100": "%",
+             "/": "÷",
+             "Math.abs(": "|"
+             
         };
-
         function formatAffichage(expr) {
              for (let cle in correspondances) {
                  expr = expr.replaceAll(cle, correspondances[cle]);
@@ -277,10 +277,7 @@
              return expr;
         }
 
-        window.onload = function() {
-             let selectMenu = document.querySelector('select');
-             changerPage(selectMenu.value);
-        }
+
     </script>
 </body>
 </html>
