@@ -75,9 +75,27 @@
             padding: 12px;
             margin: 5px;
         }
+        .clavier-Graphes{
+            background-color: rgb(120, 117, 129);
+            display: grid;
+            grid-template-columns: repeat(5,1fr);
+            gap: 8px;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 700px;
+        }
        
         
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script>
+        if (typeof Chart ==="undefined"){
+             document.write('<script scr="chart.min.js"><\/script>')
+        }
+    </script>
 </head>
 <body>
     <br>
@@ -103,7 +121,7 @@
                     <button onclick="ajouter('*')">×</button>
                     <button onclick="ajouter('Math.sqrt(')">√</button>
                     <button onclick="ajouter('4')">4</button>
-                    <button onclick="appliquer_factorielle()">fact(x)</button>
+                    <button onclick="ajouter('5')">5</button>
                     <button onclick="ajouter('6')">6</button>
                     <button onclick="ajouter('/')">÷</button>
                     <button onclick="ajouter('**2')">x²</button>
@@ -162,7 +180,7 @@
                     <button onclick="ajouter('Math.log(')">ln(x)</button>
                     <button onclick="toggleFonctions()">f(x)</button>
                     <div id="menu-ajouter" class="menu-flottant" style="display:none">
-                         <button onclick="ajouter('Math.sinh')">sinh(x)</button>
+                         <button onclick="ajouter('Math.sinh(')">sinh(x)</button>
                          <button onclick="ajouter('Math.cosh(')">cosh(x)</button>
                          <button onclick="ajouter('Math.tanh(')">tanh(x)</button>
                          <button onclick="ajouter('Math.log10(')">log(x)</button>
@@ -182,18 +200,45 @@
     </div>
         <div class="Graphes page"> 
             <br>
-            <div class="clavier">
-                <div class="ecran">
+                <div class="Courbe">
                     <canvas></canvas>
                 </div>
-                <div class="Entrer">
-                     <input type="text" id="ecran-graphe" readonly>
+                <div class="ecran">
+                     <div class="affichage"></div>
                 </div>
-                <button class="Tracer">tracer</button>
-
-            </div>
-
-    </div>
+              <div class="clavier-Graphes">
+                       <button onclick="effacer()">AC</button>
+                       <button onclick="ajouter('(')">(</button>
+                       <button onclick="ajouter(')')">)</button>
+                       <button onclick="ajouter('%')">mod</button>
+                       <button onclick="tracer()">tracer</button>
+                       <button onclick="ajouter('7')">7</button>
+                       <button onclick="ajouter('8')">8</button>
+                       <button onclick="ajouter('9')">9</button>
+                       <button onclick="ajouter('*')">×</button>
+                       <button onclick="ajouter('Math.sqrt(')">√</button>
+                       <button onclick="ajouter('4')">4</button>
+                       <button onclick="ajouter('5')">5</button>
+                       <button onclick="ajouter('6')">6</button>
+                       <button onclick="ajouter('/')">÷</button>
+                       <button onclick="ajouter('**2')">x²</button>
+                       <button onclick="ajouter('1')">1</button>
+                       <button onclick="ajouter('2')">2</button>
+                       <button onclick="ajouter('3')">3</button>
+                       <button onclick="ajouter('-')">-</button>
+                       <button onclick="ajouter('/100')">%</button>
+                       <button onclick="ajouter('0')">0</button>
+                       <button onclick="ajouter('+')">+</button>
+                       <button onclick="ajouter('Math.PI')">π</button>
+                       <button onclick="toggleFonctions()">f(x)</button>
+                       <button onclick="ajouter('x')">x</button>
+                       <button onclick="ajouter('.')">.</button>
+                       <button onclick="ajouter('>')">></button>
+                       <button onclick="ajouter('>=')">≥</button>
+                       <button onclick="ajouter('<')"><</button>
+                       <button onclick="ajouter('<=')">≤</button>
+              </div>
+        </div>
 
     <script>
         let calcul;
@@ -270,12 +315,61 @@
              "Math.abs(": "|"
              
         };
+        let myGraphe=null;
+        function tracer(){
+            let {xs,ys}=point(expressionCalcul);
+            let canvas = document.querySelector('.Graphes canvas');
+            let ctx = canvas.getContext('2d');
+            if (myGraphe!==null){
+                myGraphe.destroy();
+            }
+
+            myGraphe = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xs,
+                    datasets: [{
+                        label: 'f(x)',
+                        data: ys,
+                        borderColor: 'blue',
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    scales:{
+                        x:{type :'linear'}
+                    }
+                }
+            });
+        }
         function formatAffichage(expr) {
              for (let cle in correspondances) {
                  expr = expr.replaceAll(cle, correspondances[cle]);
                 }
              return expr;
         }
+        function point(expressionCalcul,min=-40,max=40,pas=0.01){
+            let xs=[];
+            let ys=[];
+            for (let x=min;x<=max;x+=pas){
+                let resultat;
+                try{
+                     resultat=eval(expressionCalcul);
+                }catch(e){
+                     resultat=null;
+                     window.alert("Erreur detecter!!!!!!!!1"+e.message);
+                }
+                if(typeof resultat!=="number" || !isFinite(resultat)){
+                     resultat=null;
+                }
+                xs.push(x);
+                ys.push(resultat)
+            }
+            return{xs,ys}
+        }
+
+        
 
 
     </script>
