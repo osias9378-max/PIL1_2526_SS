@@ -370,7 +370,6 @@
                 options: {
                     scales:{
                         x:{type :'linear'},
-                        y:{min:-30,max:30}
                     }
                 }
             });
@@ -382,7 +381,7 @@
                 }
              return expr;
         }
-        function point(exp,condition,min=-30,max=30,pas=0.01){
+        function point(exp,condition,min=-60,max=60,pas=0.05){
             let xs=[];
             let ys=[];
             for (let x=min;x<=max;x+=pas){
