@@ -7,34 +7,37 @@
             background-color: rgb(18, 18, 50);
         }
         .clavier-basique{
-            background-color: rgb(120, 117, 129);
+            background-color: rgb(55, 51, 75);
             display: grid;
             grid-template-columns: repeat(5,1fr);
             gap: 8px;
             color: #ffffff;
             border: none;
-            border-radius: 10px;
-            padding: 10px;
+            border-radius: 15px;
+            padding: 15px;
             font-size: 16px;
-            width: 700px;
+            width: 800px;
+            height: 300px;
 
-     
         }
         .clavier-avancer{
-            background-color: rgb(120, 117, 129);
+            background-color: rgb(55, 51, 75);
             display: grid;
             grid-template-columns: repeat(7,1fr);
             gap: 8px;
             color: #ffffff;
             border: none;
-            border-radius: 10px;
-            padding: 10px;
+            border-radius: 15px;
+            padding: 15px;
             font-size: 16px;
-            width: 700px;
+            width: 800px;
+            height: 300px;
          
         }
         .egal{
             grid-column: span 2;
+            background-color: #5e725e8b;
+            border-radius: 5px;
         }
         .page{
             display: none;
@@ -53,7 +56,7 @@
              border-radius: 8px;
              padding: 8px;
              box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-             width: 700px;
+             width: 800px;
              height: 25px;
              margin-top: 175px;
         }
@@ -71,31 +74,59 @@
         }
         
         .affichage{
-            background-color: #c1c1c6;
-            width: 700px;
-            border-radius: 5px;
+            background-color: #818188;
+            width: 800px;
+            height: 30px;
+            border-radius: 8px;
             padding: 12px;
-            margin: 5px;
+            margin: 10px;
+            font-family:Arial, Helvetica, sans-serif;
+            font-size: larger;
         }
         .clavier-Graphes{
-            background-color: rgb(120, 117, 129);
+            background-color: rgb(55, 51, 75);
             display: grid;
             grid-template-columns: repeat(5,1fr);
             gap: 8px;
             color: #ffffff;
             border: none;
-            border-radius: 10px;
-            padding: 10px;
+            border-radius: 15px;
+            padding: 15px;
             font-size: 16px;
-            width: 700px;
+            width: 800px;
         }
         .Graphique{
-            width: 700px;
+            width: 800px;
+            height: 400px;
             background-color: #c1c1c6;
+            border-radius: 10px;
         }
         .buo{
             justify-content: flex-start;
             margin-right: auto;
+        }
+        .ecran1{
+            display: none;
+            width: 800px;
+            max-height: 160px;
+            overflow-y: auto;
+            background-color: #818188;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin: 5px 0;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: right;
+        }
+        .base{
+            background-color: #686c77;
+            border-radius: 5px;
+            width: 100px;
+        }
+        .clavier-basique button, .clavier-avancer button, .clavier-Graphes button{
+            border-radius: 10px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: medium;
         }
         
     </style>
@@ -106,23 +137,22 @@
         }
     </script>
 </head>
-<body>
+<body class="fond">
     <br>
-    <select onchange="changerPage(this.value)">
+    <select onchange="changerPage(this.value)" class="base">
          <option value="Basique">Basique</option>
          <option value="Avance">Avance</option>
          <option value="Graphes">Graphes</option>
     </select>
     <div class="Basique page active"> 
-             <div class="ecran">
+               <div class="ecran1"></div>
                 <div class="affichage"></div>
-             </div>
             <br>
             <div class="clavier-basique">                  
-                    <button onclick="effacer()">AC</button>
+                    <button onclick="effacer()" style="background-color: #24385a; border-radius: 10px;">AC</button>
                     <button onclick="ajouter('(')">(</button>
                     <button onclick="ajouter(')')">)</button>
-                    <button onclick="effacerun()">⌫</button>
+                    <button onclick="effacerun()" style="background-color: #888988 ; border-radius: 10px;">⌫</button>
                     <button onclick="ajouter('Math.PI')">π</button>
                     <button onclick="ajouter('7')">7</button>
                     <button onclick="ajouter('8')">8</button>
@@ -147,15 +177,15 @@
 
     </div>
         <div class="Avance page"> 
-             <div class="ecran">
-                 <div class="affichage"></div>
-             </div>
+            <div class="ecran1" id="ecran1"></div>
+            <button onclick="historique()" ; class="historique">historique</button>
+                <div class="affichage"></div>
             <br>
             <div class="clavier-avancer">
-                    <button onclick="effacer()">AC</button>
+                    <button onclick="effacer()" style="background-color: #24385a; border-radius: 10px;">AC</button>
                     <button onclick="ajouter('(')">(</button>
                     <button onclick="ajouter(')')">)</button>
-                    <button onclick="effacerun()">⌫</button>
+                    <button onclick="effacerun()" style="background-color: #888988 ; border-radius: 10px;">⌫</button>
                     <button onclick="ajouter('Math.PI')">π</button>
                     <button onclick="ajouter('**')">x^y</button>
                     <button onclick="ajouter('*10**')">×10^</button>
@@ -186,7 +216,7 @@
                     <button onclick="calculer()" class="egal">=</button>
                     <button onclick="ajouter('Math.exp(')">exp(x)</button>
                     <button onclick="ajouter('Math.log(')">ln(x)</button>
-                    <button onclick="toggleFonctions()">f(x)</button>
+                    <button onclick="toggleFonctions()" style="background-color: #8b9890e4;">f(x)</button>
                     <div  class="menu-flottant" style="display:none">
                          <button onclick="ajouter('%')">mod</button>
                          <button onclick="ajouter('Math.sinh(')">sinh(x)</button>
@@ -204,20 +234,18 @@
 
     </div>
         <div class="Graphes page"> 
-            <button onclick="aide()",class="buo">?</button>
+            <button onclick="aide()" class="buo">?</button>
             <br> 
                 <div class="Courbe">
                     <canvas class="Graphique"></canvas>
                 </div>
-                <div class="ecran">
                      <div class="affichage"></div>
-                </div>
                 <div class="clavier-Graphes">
-                       <button onclick="effacer()">AC</button>
+                       <button onclick="effacer()" style="background-color: #24385a; border-radius: 10px;">AC</button>
                        <button onclick="ajouter('(')">(</button>
                        <button onclick="ajouter(')')">)</button>
-                       <button onclick="effacerun()">⌫</button>
-                       <button onclick="tracer()">tracer</button>
+                       <button onclick="effacerun()" style="background-color: #888988 ; border-radius: 10px;">⌫</button>
+                       <button onclick="tracer()" style="background-color: #24385a;">tracer</button>
                        <button onclick="ajouter('7')">7</button>
                        <button onclick="ajouter('8')">8</button>
                        <button onclick="ajouter('9')">9</button>
@@ -236,7 +264,7 @@
                        <button onclick="ajouter('0')">0</button>
                        <button onclick="ajouter('+')">+</button>
                        <button onclick="ajouter('Math.PI')">π</button>
-                       <button onclick="toggleFonctions()">f(x)</button>
+                       <button onclick="toggleFonctions()" style="background-color: #8b9890e4;">f(x)</button>
                        <div  class="menu-flottant" style="display:none">
                              <button onclick="ajouter('%')">mod</button>
                              <button onclick="ajouter('Math.sin(')">sin(x)</button>
@@ -253,7 +281,7 @@
                              <button onclick="ajouter('|')">|</button>
                              <button onclick="ajouter(';')">;</button>
                        </div>
-                       <button onclick="ajouter('x')">x</button>
+                       <button onclick="ajouter('x')" style="background-color: #8b9890e4;">x</button>
                        <button onclick="ajouter('.')">.</button>
                        <button onclick="ajouter('>')">></button>
                        <button onclick="ajouter('>=')">≥</button>
@@ -265,6 +293,7 @@
     <script>
         console.log("appas;ni".split(';'))
         let calcul;
+        let hist=[];
         console.log()
         function fact(n) {
              let resultat = 1;
@@ -308,13 +337,25 @@
              let pageActive = document.querySelector('.page.active');
              pageActive.querySelector('.affichage').textContent = "";
         }
-
+        let ecranf="";
         function calculer() {
              let resultat = eval(expressionCalcul);
+             hist.push({expressionCalcul,resultat});
              let pageActive = document.querySelector('.page.active');
              pageActive.querySelector('.affichage').textContent = resultat;
              expressionCalcul = resultat.toString();
              calcul=1;
+             hist.forEach(function ecran(hist){
+                ecranf+=hist.expressionCalcul + "=" + hist.resultat + "<br>";
+             })
+        }
+        function historique() {
+              document.getElementById("ecran1").innerHTML = ecranf;
+              let hecran = document.querySelector('.ecran1');
+              ecran1.style.display = (ecran1.style.display === "none") ? "block" : "none";
+
+
+
         }
 
         let correspondances = {
