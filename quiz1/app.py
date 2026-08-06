@@ -24,8 +24,16 @@ def genere_question(text):
     prompt=f""" Voici un texte : {text}
 
     Génère 7 questions à choix multiples (4 réponses chacune) basées sur ce texte.
-    Réponds UNIQUEMENT en JSON, sans aucun texte avant ou après, dans ce format exact :
-    {{"questions": [{{"question": "...", "choix": ["A", "B", "C", "D"], "reponse_correcte": "A"}}]}}
+    Réponds UNIQUEMENT en JSON, sans aucun texte avant ou après, dans ce format exact surtout ne pas oublier les indicateur(1A) devant chaque reponse imperativement sinon ne genere rien :
+    {{"questions": [{{"question": "question", "choix": ["1A-reponse", "1B-reponse", "1C-reponse", "1D-reponse"], "reponse_correcte": "A"}}
+    {{"question": "question", "choix": ["2A-reponse", "2B-reponse", "2C-reponse", "2D-reponse"], "reponse_correcte": "A"}}
+    {{"question": "question", "choix": ["3A-reponse", "3B-reponse", "3C-reponse", "3D-reponse"], "reponse_correcte": "C"}}
+    {{"question": "question", "choix": ["4A-reponse", "4B-reponse", "4C-reponse", "4D-reponse"], "reponse_correcte": "B"}}
+    {{"question": "question", "choix": ["5A-reponse", "5B-reponse", "5C-reponse", "5D-reponse"], "reponse_correcte": "A"}}
+    {{"question": "question", "choix": ["6A-reponse", "6B-reponse", "6C-reponse", "6D-reponse"], "reponse_correcte": "D"}}
+    {{"question": "question", "choix": ["7A-reponse", "7B-reponse", "7C-reponse", "7D-reponse"], "reponse_correcte": "A"}}]}}
+    
+    
     """
 
     data={
@@ -39,14 +47,13 @@ def genere_question(text):
     quiz_json = json.loads(contenu)
     return quiz_json
 
-
 @app.route("/upload",methods=["POST"])
 def upload():
     text=""
     file=request.files["file"]
     filename=file.filename
     if "file" not in request.files:
-        return jsonify({"error": "Aucun fichier envoyé"}), 400
+        return jsonify({"error": "Aucun fichier envoyé"})
     if filename.endswith(".pdf"):
         text=""
         with pdfplumber.open(file) as pdf:
@@ -57,10 +64,10 @@ def upload():
     elif filename.endswith(".txt"):
             text = file.read().decode("utf-8")
     else :
-        return jsonify({"error": "Format non supporté (PDF ou TXT uniquement)"}), 400
+        return jsonify({"error": "Format non supporté (PDF ou TXT uniquement)"})
 
     quiz=genere_question(text)
     return jsonify(quiz)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)
