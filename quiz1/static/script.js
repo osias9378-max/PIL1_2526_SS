@@ -9,6 +9,10 @@ upload_btn.addEventListener("click",async () => {
         window.alert("Veuillez choisir un fichier");
         return;
     }
+    if (file.size > 1024 * 1024) {
+    alert("Le fichier est trop volumineux (max 1 Mo)");
+    return;
+    }
     const formData = new FormData();
     formData.append("file",file);
     const response= await fetch("/upload",{
