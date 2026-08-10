@@ -44,7 +44,7 @@ def genere_question(text,mode="fichier"):
     }
 
     if mode=="sujet":
-        prompt = f"""Génère un quiz de 7 questions à choix multiples sur le sujet suivant : {text}
+        prompt = f"""Génère un quiz de 9 questions à choix multiples sur le sujet suivant : {text}
 
         Si ce sujet est trop vague, inventé, ou non-éducatif, réponds uniquement avec {{"error": "Sujet non reconnu ou invalide"}}.
         Ne génère jamais de contenu inventé si tu n'es pas sûr des faits.
@@ -54,12 +54,14 @@ def genere_question(text,mode="fichier"):
         {{"question": "question", "choix": ["4A-reponse", "4B-reponse", "4C-reponse", "4D-reponse"], "reponse_correcte": "B"}}
         {{"question": "question", "choix": ["5A-reponse", "5B-reponse", "5C-reponse", "5D-reponse"], "reponse_correcte": "A"}}
         {{"question": "question", "choix": ["6A-reponse", "6B-reponse", "6C-reponse", "6D-reponse"], "reponse_correcte": "D"}}
-        {{"question": "question", "choix": ["7A-reponse", "7B-reponse", "7C-reponse", "7D-reponse"], "reponse_correcte": "A"}}]}}"""
+        {{"question": "question", "choix": ["7A-reponse", "7B-reponse", "7C-reponse", "7D-reponse"], "reponse_correcte": "A"}}
+        {{"question": "question", "choix": ["8A-reponse", "8B-reponse", "8C-reponse", "8D-reponse"], "reponse_correcte": "A"}}
+        {{"question": "question", "choix": ["9A-reponse", "9B-reponse", "9C-reponse", "9D-reponse"], "reponse_correcte": "A"}}]}}"""
 
     else:
         prompt=f""" Voici un texte : {text}
 
-    Génère 7 questions à choix multiples (4 réponses chacune) basées sur ce texte.
+    Génère 9 questions à choix multiples (4 réponses chacune) basées sur ce texte.
     Réponds UNIQUEMENT en JSON, sans aucun texte avant ou après, dans ce format exact surtout ne pas oublier les indicateur(1A) devant chaque reponse imperativement sinon ne genere rien :
     {{"questions": [{{"question": "question", "choix": ["1A-reponse", "1B-reponse", "1C-reponse", "1D-reponse"], "reponse_correcte": "A"}}
     {{"question": "question", "choix": ["2A-reponse", "2B-reponse", "2C-reponse", "2D-reponse"], "reponse_correcte": "A"}}
@@ -67,7 +69,9 @@ def genere_question(text,mode="fichier"):
     {{"question": "question", "choix": ["4A-reponse", "4B-reponse", "4C-reponse", "4D-reponse"], "reponse_correcte": "B"}}
     {{"question": "question", "choix": ["5A-reponse", "5B-reponse", "5C-reponse", "5D-reponse"], "reponse_correcte": "A"}}
     {{"question": "question", "choix": ["6A-reponse", "6B-reponse", "6C-reponse", "6D-reponse"], "reponse_correcte": "D"}}
-    {{"question": "question", "choix": ["7A-reponse", "7B-reponse", "7C-reponse", "7D-reponse"], "reponse_correcte": "A"}}]}}
+    {{"question": "question", "choix": ["7A-reponse", "7B-reponse", "7C-reponse", "7D-reponse"], "reponse_correcte": "A"}}
+    {{"question": "question", "choix": ["8A-reponse", "8B-reponse", "8C-reponse", "8D-reponse"], "reponse_correcte": "A"}}
+    {{"question": "question", "choix": ["9A-reponse", "9B-reponse", "9C-reponse", "9D-reponse"], "reponse_correcte": "A"}}]}}
     
     """
 

@@ -2,6 +2,18 @@ const fileinput=document.getElementById("fileinput");
 const upload_btn=document.getElementById("upload_btn");
 const Quiz_container=document.getElementById("Quiz_container");
 const trol=document.getElementById("trol");
+const accroche_up=document.getElementById("accroche_up");
+const zone=document.getElementById("zone")
+
+
+zone.addEventListener("click", () => {
+    fileinput.click();
+});
+fileinput.addEventListener("change", () => {
+    if (fileinput.files.length > 0) {
+        zone.textContent = "📄 " + fileinput.files[0].name;
+    }
+});
 
 upload_btn.addEventListener("click",async () => {
     const file = fileinput.files[0];
@@ -22,11 +34,14 @@ upload_btn.addEventListener("click",async () => {
     const data = await response.json() ;
     let qcm = "";
     data.questions.forEach((q,index) => {
-        qcm+= `<div> ${index+1}-${q.question}</div>
-        <p><button>${q.choix[0]}</button></p>
-        <p><button>${q.choix[1]}</button></p>
-        <p><button>${q.choix[2]}</button></p>
-        <p><button>${q.choix[3]}</button></p>`;
+        qcm+= `
+        <div class="questions">
+             <h3> ${index+1}-${q.question}</h3>
+             <button>${q.choix[0]}</button>
+             <button>${q.choix[1]}</button>
+             <button>${q.choix[2]}</button>
+             <button>${q.choix[3]}</button>
+        </div>`;
     })
     Quiz_container.innerHTML = qcm;
     const boutons = Array.from(document.querySelectorAll("#Quiz_container button"));
@@ -54,10 +69,18 @@ upload_btn.addEventListener("click",async () => {
             let pourcentage = Math.round((score / data.questions.length) * 100);
             let resume = tab.map((t) => `<p>Question ${t.question + 1} : ${t.reponse}</p>`).join("");
             trol.innerHTML = resume + `<p><strong>Score : ${score}/${data.questions.length} (${pourcentage}%)</strong></p>`;
+  
     }
     });
     })
     })
-    
-
+    gsap.fromTo(accroche_up,
+    { opacity: 0, y: 8 },
+    { opacity: 1, y: 0, duration: 0.6, delay: 0.5, ease: "power2.out" });
+    gsap.fromTo(upload_btn,
+    { opacity: 0, y: 8 },
+    { opacity: 1, y: 0, duration: 0.6, delay: 0.7, ease: "power2.out" });
+    gsap.fromTo(zone,
+    { opacity: 0, y: 8 },
+    { opacity: 1, y: 0, duration: 0.6, delay: 0.7, ease: "power2.out" });
 

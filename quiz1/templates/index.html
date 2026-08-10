@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
     <title>Quizzzzzzz</title>
 </head>
-<body>
-    <h1>Générateur de Quiz</h1>
-    <p>Teste tes connaissances ou révise à partir de tes cours !</p>
-
-    <button><a href="/upload-page">📄 Générer un quiz depuis un fichier</a></button>
+<body class="body">
+    <p class="titre" id="titre">Générateur de Quiz</p>
+    <h4 class="accroche" id="accroche">Teste tes connaissances ou révise à partir de tes cours ! </h4>
+    <p><a href="/upload-page" class="bouton-1" id="bouton-1">📄 Générer un quiz depuis un fichier ➡️</a></p>
     <br><br>
-    <button><a href="/sujet-page">💡 Me tester sur un sujet</a></button>
-    <script src="/static/script.js"></script>
+    <p><a href="/sujet-page" class="bouton-2" id="bouton-2">💡 Me tester sur un sujet ➡️</a></p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="/static/index.js"></script>
     
 </body>
 </html>
