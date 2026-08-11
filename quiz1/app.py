@@ -48,7 +48,8 @@ def genere_question(text,mode="fichier"):
 
         Si ce sujet est trop vague, inventé, ou non-éducatif, réponds uniquement avec {{"error": "Sujet non reconnu ou invalide"}}.
         Ne génère jamais de contenu inventé si tu n'es pas sûr des faits.
-        Réponds UNIQUEMENT en JSON, dans ce format exact : {{"questions": [{{"question": "question", "choix": ["1A-reponse", "1B-reponse", "1C-reponse", "1D-reponse"], "reponse_correcte": "A"}}
+            Réponds UNIQUEMENT en JSON, sans aucun texte avant ou après, dans ce format exact surtout ne pas oublier les indicateur(1A) devant chaque reponse imperativement sinon ne genere rien :
+        {{"questions": [{{"question": "question", "choix": ["1A-reponse", "1B-reponse", "1C-reponse", "1D-reponse"], "reponse_correcte": "A"}}
         {{"question": "question", "choix": ["2A-reponse", "2B-reponse", "2C-reponse", "2D-reponse"], "reponse_correcte": "A"}}
         {{"question": "question", "choix": ["3A-reponse", "3B-reponse", "3C-reponse", "3D-reponse"], "reponse_correcte": "C"}}
         {{"question": "question", "choix": ["4A-reponse", "4B-reponse", "4C-reponse", "4D-reponse"], "reponse_correcte": "B"}}

@@ -18,5 +18,5 @@ gsap.fromTo(bouton1,
 );
 gsap.fromTo(bouton2,
     { opacity: 0, y: 8 },
-    { opacity: 1, y: 0, duration: 0.6, delay: 0.9, ease: "power2.out" }
+    { opacity: 1, y: 0, duration: 0.6, delay: 0.95, ease: "power2.out" }
 );

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +7,13 @@
     <link rel="stylesheet" href="/static/style.css">
     <title>Quizzzzzzz</title>
 </head>
-<body>
-    <input type="text" id="sujets" placeholder="Ex:le Benin">
-    <button id="generer_btn">Générer votre quiz</button>
-
+<body class="body-1">
+    <p class="accroche_up" id="accroche_up">Teste tes connaissances sur n'importe quel sujet en quelques secondes ⚡</p>
+    <input type="text" id="sujets" class="champ-sujet" placeholder="Ex:le Benin">
+    <button id="generer_btn" class="bouton-3">Générer votre quiz</button>
     <div id="Quiz_container"></div>
-    <p id="trol">Resultat</p>
-
+    <p id="trol"></p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="/static/sujet.js"></script>
     
 </body>
