@@ -8,7 +8,8 @@ square=width//rows
 
 brown=(87,16,16)
 white=(255,255,255) 
-
+black=(0,0,0)
+green=(0,1,0)
 path="chessneed/chess_images"
 
 chevalier_noir=pygame.transform.scale(pygame.image.load(os.path.join(path,"bN.png")),(square,square))
