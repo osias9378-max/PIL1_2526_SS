@@ -52,11 +52,20 @@ def inde(col,row):
 
 
 def change_turn(turn):
-    if turn == 2:
+    if turn == 2 or turn==3:
         return  1
-    elif  turn==1:
+    elif  turn==1 or turn== 4:
         return  2
 
+def man_turn(item):
+
+    if item == 3 :
+        return 2
+    elif item == 4 :
+        return 1 
+    else :
+        return item
+    
 def nbpion(Board):
     nbp_white=0
     nbp_black=0
@@ -91,7 +100,7 @@ def move():
         global row_i
         print(turn)
 
-        if Board[index][2] != 0 and turn==Board[index][2]:
+        if (Board[index][2] ==1 or Board[index][2]==2 ) and turn==man_turn(Board[index][2]):
             possible_moves.clear()
         
             if col-1>=0  and row+1<8:
@@ -157,66 +166,76 @@ def move():
 
 
             print(col_i,row_i)
-            print(turn)
-  
+
             pygame.display.update()
 
-        elif Board[index][2] == 3:
-
-            for i in range(8):
+        elif Board[index][2] == 3 and turn == man_turn(Board[index][2]) :
+            possible_moves.clear()
+            print(possible_moves,"yo")
+            for i in range(1,8):
                 if col-i >= 0 and row-i >= 0:
+                    print("col")
+                    print(col-i,row-i)
                     if Board[inde(col-i, row-i)][2] == 0:
-                        possible_moves.append((col-i, row-i,3))
+                        possible_moves.append((row-i, col-i, 3))      
                     elif Board[inde(col-i, row-i)][2] == 1:
-                        possible_moves.append((col-i, row-i,3))
-                        break
-                    else:
+                        possible_moves.append((row-i, col-i, 3))      
                         break
 
-            for i in range(8):
+            print(f"possible_move1: {possible_moves}")
+
+
+            for i in range(1,8):
                 if col+i < 8 and row+i < 8:
+                    print(col+i,row+i)
                     if Board[inde(col+i, row+i)][2] == 0:
-                        possible_moves.append((col+i,row+i,3))
+                        possible_moves.append((row+i, col+i, 3))     
                     elif Board[inde(col+i, row+i)][2] == 1:
-                        possible_moves.append((col+i, row+i,3))
+                        possible_moves.append((row+i, col+i, 3))     
                         break
-                    else:
-                        break
+            print(f"possible_move2: {possible_moves}")
 
-            for i in range(8):
+
+            for i in range(1,8):
                 if col+i < 8 and row-i >= 0:
                     if Board[inde(col+i, row-i)][2] == 0:
-                        possible_moves.append((col+i, row-i,3))
+                        possible_moves.append((row-i, col+i,3))
                     elif Board[inde(col+i, row-i)][2] == 1:
-                        possible_moves.append((col+i, row-i,3))
-                        break
-                    else:
+                        possible_moves.append((row-i, col+i,3))
                         break
 
-            for i in range(8):
+            print(f"possible_move3: {possible_moves}")
+
+
+            for i in range(1,8):
                 if col-i >= 0 and row+i < 8:
                     if Board[inde(col-i, row+i)][2] == 0:
-                        possible_moves.append((col-i, row+i,3))
+                        possible_moves.append((row+i, col-i, 3))      
                     elif Board[inde(col-i, row+i)][2] == 1:
-                        possible_moves.append((col-i, row+i,3))
+                        possible_moves.append((row+i, col-i, 3))      
+
                         break
-                    else:
-                        break
-            print(f"possible_move: {possible_moves}")
+
+            print(f"possible_move4: {possible_moves}")
+
+
 
             for i in possible_moves :
                 pygame.draw.circle(window,depla,((185+((i[1])*90)),(95+((i[0])*90))),10)
             pygame.display.update()
+            col_i=col
+            row_i=row
             
 
-        elif Board[index][2] == 4:
+        elif Board[index][2] == 4 and turn==man_turn(Board[index][2]):
 
             for i in range(8):
                 if col-i >= 0 and row-i >= 0:
                     if Board[inde(col-i, row-i)][2] == 0:
-                        possible_moves.append((col-i, row-i,4))
+                        possible_moves.append((row-i, col-i, 4))      
                     elif Board[inde(col-i, row-i)][2] == 2:
-                        possible_moves.append((col-i, row-i,4))
+                        possible_moves.append((row-i, col-i, 4))      
+
                         break
                     else:
                         break
@@ -224,9 +243,10 @@ def move():
             for i in range(8):
                 if col+i < 8 and row+i < 8:
                     if Board[inde(col+i, row+i)][2] == 0:
-                        possible_moves.append((col+i, row+i,4))
+                        possible_moves.append((row+i, col+i, 4))      
                     elif Board[inde(col+i, row+i)][2] == 2:
-                        possible_moves.append((col+i, row+i,4))
+                        possible_moves.append((row+i, col+i, 4))      
+
                         break
                     else:
                         break
@@ -234,9 +254,10 @@ def move():
             for i in range(8):
                 if col+i < 8 and row-i >= 0:
                     if Board[inde(col+i, row-i)][2] == 0:
-                        possible_moves.append((col+i, row-i,4))
+                        possible_moves.append((row-i, col+i, 4))      
                     elif Board[inde(col+i, row-i)][2] == 2:
-                        possible_moves.append((col+i, row-i,4))
+                        possible_moves.append((row-i, col+i, 4))      
+
                         break
                     else:
                         break
@@ -244,9 +265,9 @@ def move():
             for i in range(8):
                 if col-i >= 0 and row+i < 8:
                     if Board[inde(col-i, row+i)][2] == 0:
-                        possible_moves.append((col-i, row+i,4))
+                        possible_moves.append((row+i, col-i, 4))      
                     elif Board[inde(col-i, row+i)][2] == 2:
-                        possible_moves.append((col-i, row+i,4))
+                        possible_moves.append((row+i, col-i, 4))      
                         break
                     else:
                         break
@@ -261,8 +282,7 @@ def move():
             pygame.display.update()
 
         elif Board[index][2] == 0 or Board[index][2] != Board[inde(col_i,row_i)][2]  :            
-
-
+            print(f"mouvement:{possible_moves}")
             if (7,col,1) in possible_moves :
                 pygame.draw.circle(window,p_white,((185+((col)*90)),(95+((7)*90))),40)
                 pygame.draw.rect(window,fonce,(140+(col_i*90),50+(row_i*90),90,90)) 
@@ -331,6 +351,7 @@ def move():
                 pygame.display.update()
 
             if (row,col,3) in possible_moves :
+                print("Dame noir")
                 pygame.draw.circle(window,p_black,((185+((col)*90)),(95+((row)*90))),40)
                 pygame.draw.rect(window,fonce,(140+(col_i*90),50+(row_i*90),90,90)) 
                 Board[inde(col_i,row_i)]=(row_i,col_i,0)
@@ -351,16 +372,40 @@ def move():
                 possible_moves.remove((row,col,4))
                 print(possible_moves)
                 turn=change_turn(turn)
-                for i in possible_moves :
+                for i in possible_moves :    
                     if Board[inde(i[1],i[0])][2] !=0 :
                         pygame.draw.rect(window,fonce,(140+(i[1]*90),50+(i[0]*90),90,90))
                 pygame.display.update()
-                print(possible_moves)
+                print(possible_moves) 
 
+            for row in range(8):
+                for col in range(8):
+                    if (col+row)%2 == 0:
+                        color =clair
+                        pygame.draw.rect(window,color,(140+(col*90),50+(row*90),90,90)) 
+                    else:
+                        color= fonce
+                        pygame.draw.rect(window,color,(140+(col*90),50+(row*90),90,90)) 
+    
+            for i in Board:
+                        if i[2]==1:
+                            color=p_white
+                            pygame.draw.circle(window,color,((185+((i[1])*90)),(95+((i[0])*90))),30)
+    
+                        elif i[2] == 2 :
+                            color=p_black 
+                            pygame.draw.circle(window,color,((185+((i[1])*90)),(95+((i[0])*90))),30)
 
+                        if i[2]==3:
+                            color=p_black
+                            pygame.draw.circle(window,color,((185+((i[1])*90)),(95+((i[0])*90))),40)
 
+                        if i[2]==4:
+                            color=p_white
+                            pygame.draw.circle(window,color,((185+((i[1])*90)),(95+((i[0])*90))),40)
 
-
+            pygame.display.update()
+        print(f"row:{row},col:{col},col_i:{col_i},row_i:{row_i}")
 
         print(Board)
         print(turn)
