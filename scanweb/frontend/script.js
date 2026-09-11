@@ -1,6 +1,7 @@
 const bout = document.getElementById("btn-scan");
 const loader = document.getElementById("loader");
 const history = document.getElementById("btn-history");
+const air = document.getElementById("btn-air")
 
 
 bout.addEventListener("click", async () =>{
@@ -28,11 +29,12 @@ bout.addEventListener("click", async () =>{
     for (let i of donne){
         table += "<tr>" +
                     "<td>" + k + "</td>"
-        k++
         for( const [key,value] of Object.entries(i)){
             table += "<td>" + value + "</td>" 
         }
         table +=   "<tr>"
+        k++;
+
     }
     table += "</table>"
     document.getElementById("tableau").innerHTML=table
@@ -44,7 +46,6 @@ history.addEventListener("click",async () => {
     const hist = await hist_brute.json();
     if (hist_brute.ok){
         let table_hist ="";
-        let j=1;
         table_hist += "<table>" +
                            "<tr>" +
                                 "<th>" + "Capture number" + "</th>"+
@@ -57,17 +58,20 @@ history.addEventListener("click",async () => {
                            "</tr>"
         for (let item of hist){
                 console.log(item[2]);
-                table_hist += "<tr>"+
-                                   "<td>" + item[0]+ "</td>" +
-                                   "<td>" + item[1]+ "</td>" 
-                for (let items of item[2]){
-                    table_hist += "<td>" + j + "</td>" 
+                let j=1;
+                for (items of item[2]){
+                    table_hist += "<tr>" +
+                                           "<td>" + item[0] + "</td>"+ 
+                                           "<td>" + item[1] + "</td>"+
+                                           "<td>" + j + "</td>"
                     j++;
                     for (const [key,value] of Object.entries(items)){
-                        table_hist += "<td>" + value + "</td>"
+                        table_hist += "<td>" + value + "</td>" 
                     }
+
+                    table_hist += "</tr>"
+
                 }
-                table_hist += "</tr>"
         }
         table_hist += "</table>"
         console.log(hist);
@@ -76,4 +80,31 @@ history.addEventListener("click",async () => {
     else{
         alert("Erreur!!!!");
     }
+});
+
+air.addEventListener( "click" , async ()=>{
+    const air_wifi = await fetch("http://127.0.0.1:5000/api/wifi");
+    const air = await air_wifi.json();
+    let wifi = " "
+    wifi += "<table>" +
+                   "<tr>" +
+                         "<th>" +"BSSID"+"</th>"+
+                         "<th>" +"Channel"+ "</th>"+
+                         "<th>" + "Chiffrement" +"</th>"+
+                         "<th>" + "Name"+"</th>"+
+                    "</tr>"
+    for (let wi of air){
+        for (const [key,value] of Object.entries[wifi]){
+            wifi += "<tr>" +
+                          "<td>" + value + "</td>"+
+                    "</tr>"
+
+        }
+    }
+    wifi += "</table>"
+    document.getElementById("table_wifi").innerHTML = wifi
+    console.log(wifi)
+
+
+
 });
