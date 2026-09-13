@@ -3,13 +3,17 @@ import ipaddress
 import nmap 
 import psycopg2
 import json
-
+import threading
 
 from flask import Flask , jsonify,render_template
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder="frontend",static_folder="frontend")
 CORS(app)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 def detecter_sous_reseau():
     sortie = subprocess.check_output(["ip", "-o", "-4", "addr", "show"]).decode()
@@ -104,13 +108,12 @@ def detecter_interface():
         return None
     
 def activer_mode_monitor():
-    resultat = subprocess.run(["sudo", "airmon-ng", "start", interface], capture_output=True, text=True)
+    resultat = subprocess.run([ "airmon-ng", "start", interface], capture_output=True, text=True)
     return (resultat.stdout)
 
 def desactiver_mode_monitor():
     interface_pis = f"{interface}mon"
-    resultat = subprocess.run(["sudo", "airmon-ng", "stop", interface_pis], capture_output=True, text=True)
-    resultat = subprocess.run(["sudo", "systemctl", "restart", "NetworkManager"], capture_output=True, text=True)
+    resultat = subprocess.run(["airmon-ng", "stop", interface_pis], capture_output=True, text=True)
     return (resultat.stdout)
 
 number = 1
@@ -119,7 +122,7 @@ def parcourir_air():
     global number
     interface_pis = f"{interface}mon"
     fichier="/home/tchenga/projet/scanweb/scan_wifi"
-    subprocess.run(["sudo", "timeout","-k" ,"5","15","airodump-ng",  interface_pis,"--output-format","csv","--write",fichier],
+    subprocess.run(["timeout","-k" ,"5","15","airodump-ng",  interface_pis,"--output-format","csv","--write",fichier],
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL
     )
@@ -137,7 +140,6 @@ def parcourir_air():
     print(parcour)
     return parcour
 
-@app.route("/api/wifi")
 def aircrack():
     global interface
     interface = detecter_interface()
@@ -150,5 +152,29 @@ def aircrack():
     return resultat
 
 
+etat_scan_wifi = {"en_cours": False, "resultat": None}
+def executer_scan_wifi():
+    global interface
+    interface = detecter_interface()
+    activer_mode_monitor()
+    resultat = parcourir_air()
+    desactiver_mode_monitor()
+    etat_scan_wifi["resultat"] = resultat
+    etat_scan_wifi["en_cours"] = False
+
+@app.route("/api/wifi/lancer")
+def lancer_scan_wifi():
+    if etat_scan_wifi["en_cours"]:
+        return jsonify({"erreur": "Un scan est déjà en cours"}), 409
+    etat_scan_wifi["en_cours"] = True
+    etat_scan_wifi["resultat"] = None
+    thread = threading.Thread(target=executer_scan_wifi)
+    thread.start()
+    return jsonify({"status": "lancé"})
+
+@app.route("/api/wifi/statut")
+def statut_scan_wifi():
+    return jsonify(etat_scan_wifi)
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000,threaded=True,use_reloader=False)

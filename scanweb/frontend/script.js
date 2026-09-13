@@ -82,29 +82,44 @@ history.addEventListener("click",async () => {
     }
 });
 
-air.addEventListener( "click" , async ()=>{
-    const air_wifi = await fetch("http://127.0.0.1:5000/api/wifi");
-    const air = await air_wifi.json();
-    let wifi = " "
-    wifi += "<table>" +
-                   "<tr>" +
-                         "<th>" +"BSSID"+"</th>"+
-                         "<th>" +"Channel"+ "</th>"+
-                         "<th>" + "Chiffrement" +"</th>"+
-                         "<th>" + "Name"+"</th>"+
-                    "</tr>"
-    for (let wi of air){
-        for (const [key,value] of Object.entries[wifi]){
-            wifi += "<tr>" +
-                          "<td>" + value + "</td>"+
-                    "</tr>"
 
+air.addEventListener("click", async () => {
+    loader.classList.remove("cache")
+    const lancement = await fetch("http://127.0.0.1:5000/api/wifi/lancer");
+    if (!lancement.ok) {
+        const erreur = await lancement.json();
+        alert(erreur.erreur);
+        return;
+    }
+    const intervalId = setInterval(async () => {
+        const statut_reponse = await fetch("http://127.0.0.1:5000/api/wifi/statut");
+        const statut = await statut_reponse.json();
+
+        if (!statut.en_cours) {
+            clearInterval(intervalId); 
+            loader.classList.add("cache")
+            afficherResultatsWifi(statut.resultat); 
         }
+    }, 2000);
+});
+
+function afficherResultatsWifi(air){
+        let wifi = "<table>" +
+                   "<tr>" +
+                   "<th>BSSID</th>" +
+                   "<th>Channel</th>" +
+                   "<th>Chiffrement</th>" +
+                   "<th>Name</th>" +
+                   "</tr>";
+                   
+        for (let wi of air) {
+            wifi += "<tr>";
+            for (const [key, value] of Object.entries(wi)) {
+                wifi += "<td>" + value + "</td>";
+            }
+            wifi += "</tr>";
     }
     wifi += "</table>"
     document.getElementById("table_wifi").innerHTML = wifi
     console.log(wifi)
-
-
-
-});
+};
