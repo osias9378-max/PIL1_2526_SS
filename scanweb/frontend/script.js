@@ -106,20 +106,31 @@ air.addEventListener("click", async () => {
 function afficherResultatsWifi(air){
         let wifi = "<table>" +
                    "<tr>" +
-                   "<th>BSSID</th>" +
-                   "<th>Channel</th>" +
-                   "<th>Chiffrement</th>" +
-                   "<th>Name</th>" +
+                   "<th>"+"Device number"+"</th>" +
+                   "<th>"+"BSSID"+ "</th>" +
+                   "<th>"+"Channel"+"</th>" +
+                   "<th>"+"Chiffrement"+"</th>" +
+                   "<th>"+"Name"+"</th>" +
                    "</tr>";
-                   
+        let comp=1;
         for (let wi of air) {
             wifi += "<tr>";
+            wifi += "<td>" +"<button class='btn-test' data-bssid='" + wi.BSSID + "' data-channel='"+ wi.Channel +"'>" + comp + "</button>"+"</td>";
             for (const [key, value] of Object.entries(wi)) {
                 wifi += "<td>" + value + "</td>";
             }
+                comp+=1;
+
             wifi += "</tr>";
-    }
+        }
     wifi += "</table>"
     document.getElementById("table_wifi").innerHTML = wifi
-    console.log(wifi)
+    console.log()
 };
+document.getElementById("table_wifi").addEventListener("click", (event) => {
+    if (event.target.classList.contains("btn-test")) {
+        const bssid = event.target.dataset.bssid;
+        const canal = event.target.dataset.channel;
+        window.alert("Cher utilisateur veuillez confirmer que ce reseau wifi vous appartient bien.Toute operatoins sur un reseau qui ne vous appartient pourrais vous exposer a certaines consequences judiciaires")
+    }
+});
