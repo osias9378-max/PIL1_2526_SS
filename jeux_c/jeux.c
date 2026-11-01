@@ -20,25 +20,6 @@ typedef struct number number;
 
 typedef enum{faux,vrai} boolean;
 
-number penser(){
-   number tab ;
-   tab.a[0] =(rand() % 9) + 1;
-   do{
-      tab.a[1] = rand() % 10;
-   }while(tab.a[1] == tab.a[0]);
-   do{
-      tab.a[2] = rand() % 10; 
-   } while (tab.a[1] == tab.a[2] || tab.a[2] == tab.a[0]);
-   return tab;  
-}
-
-void afficher(number tab){
-   for(int i = 0;i<3;i++){
-      printf("%d",tab.a[i]);
-   }
-   printf("\n");
-}
-
 number transform(int nb){
    number tab;
    for(int i = 2;i>=0;i--){
@@ -70,6 +51,44 @@ boolean pre_verify(int use_try){
    return vrai;
 }
 
+number penser(chiffre bibli){
+   number tab ;
+   tab.a[0] =(rand() % 9) + 1;
+   do{
+      tab.a[1] = rand() % 10;
+   }while(tab.a[1] == tab.a[0]);
+   do{
+      tab.a[2] = rand() % 10; 
+   } while (tab.a[1] == tab.a[2] || tab.a[2] == tab.a[0]);
+   for(int i=0;i<3;i++){
+      tab.a[i] = bibli.a[tab.a[i]];
+   }
+   int numb = tab.a[0] *100 +tab.a[1] *10 + tab.a[2];
+   if (!pre_verify(numb)){
+      penser(bibli);
+      return tab;
+   }
+   return tab;  
+}
+
+void afficher(number tab){
+   for(int i = 0;i<3;i++){
+      printf("%d",tab.a[i]);
+   }
+   printf("\n");
+}
+
+
+chiffre parabibli(chiffre bibli,int  nombre){
+   int m;
+   do
+      m = rand() % 10;
+   while(m == bibli.a[nombre]);   
+   bibli.a[nombre] = m;
+   return bibli;
+}
+
+
 couple verify(number user,number tab){
    couple check;
    check.a = 0;
@@ -100,7 +119,7 @@ number transposer_bis(number first){
 
 
 
-number search(number furst,number first , couple out_us,boolean help,chiffre bibli){
+number search(number furst,number first , couple out_us,couple out_pre,chiffre bibli){
    int m = rand() % 10;
    if(out_us.a == 3){
       if(out_us.b == 0 ){
@@ -120,62 +139,121 @@ number search(number furst,number first , couple out_us,boolean help,chiffre bib
          first = transposer(first);
          return first;
       }
-   
+   }
    if(out_us.a == 1){
       if(out_us.b == 0){
-         if(help){
-            first = transposer(first);
-            return first;
+         if(out_pre.b == 0){
+            int help = first.a[0];
+            if(first.a[2]!=0){
+               first.a[0] = first.a[2];
+               first.a[2] = first.a[1];
+               first.a[1] = help; 
+               return first ;
+           }
          }
-         first = transposer_bis(first);
-         return first;
       }
       if(out_us.b == 1 ){
+         if(out_pre.b == out_pre.b){
+            for (int i = 0;i<3;i++){
+                  if(furst.a[i] == first.a[i]){
+                     bibli = parabibli(bibli,furst.a[i]);
+                     first.a[i] = bibli.a[m];
+                     return first;
+                  }
+            }
+         }
          for (int i = 0;i<3;i++){
-            if(furst.a[i] == first.a[i]){
+               if(furst.a[i] != first.a[i]){
+                  bibli = parabibli(bibli,furst.a[i]);
+                  first.a[i] = bibli.a[m];
+                  return first;
+               }
+         }
+      }
+   }
+   if(out_us.a ==2){
+      if(out_us.b ==0 || out_us.b == 1){
+         if(out_pre.b == out_pre.b){
+            int help = first.a[0];
+            if(first.a[2]!=0){
+               first.a[0] = first.a[2];
+               first.a[2] = first.a[1];
+               first.a[1] = help; 
+               return first ;
+            }
+         }
+      }
+      if(out_us.b == 2 ){
+         if(out_pre.b == 0 || out_pre.b == 1){
+            for (int i = 0;i<3;i++){
+               if(furst.a[i] == first.a[i]){
+                  bibli = parabibli(bibli,furst.a[i]);
+                  first.a[i] = bibli.a[m];
+                  return first;
+               }
+            }
+         }
+         for (int i = 0;i<3;i++){
+            if(furst.a[i] != first.a[i]){
                bibli = parabibli(bibli,furst.a[i]);
                first.a[i] = bibli.a[m];
                return first;
             }
          }
-
       }
-
-   }
-
    }
 }
 
-chiffre parabibli(chiffre bibli,int  nombre){
-   int m;
-   do
-      m = rand() % 10;
-   while(m == bibli.a[nombre]);   
-   return bibli;  
-}
 
 int main(){
    srand(time(NULL));
-   int user;
-   number tab  = penser();
+   number user,tab,now;
    chiffre bibli;
    for (int i = 0; i<10;i++){
       bibli.a[i] = i;
    }
-   couple out;
-   if(out.a == 0){
-   }
-   
-   printf("yo\n");
-   scanf("%d",&user);
-   if (pre_verify(user)){
-      number use = transform(user);
-      afficher(use);
+   couple out,out_us;
+   do
+   {
+      tab = penser(bibli);
       afficher(tab);
-      couple verif = verify(use,tab);
-      printf("VOUS AVEZ %d bon et %d bien places",verif.a,verif.b);
-   }
+      printf("Combien de chiffres sont bon ????\n");
+      scanf("%d",&out.a);
+      if(out.a != 0){
+         printf("Combien entre les %d sont bien place\n",out.a);
+         scanf("%d",&out.b);
+      }
+      else{
+         for (int i = 0;i<3;i++){
+            bibli = parabibli(bibli,tab.a[i]);
+         }
+      }
+   } while (out.a == 0);
+   out_us = out;
+   number pre = tab;
+   user = pre;
+   now = search(pre,user,out,out_us,bibli);
    
-
+   while(out.b != 3){
+      afficher(now);
+      out_us = out;
+      do
+      {
+         printf("Combien de chiffres sont bon ????\n");
+         scanf("%d",&out.a);
+         if(out.a != 0){
+           printf("Combien entre les %d sont bien place",out.a);
+           scanf("%d",&out.b);
+         }
+         else{
+           for (int i = 0;i<3;i++){
+                bibli = parabibli(bibli,tab.a[i]);
+            }
+         }
+      } while (out.a == 0);
+      pre = user;
+      user = now;
+     now = search(pre,user,out,out_us,bibli);
+   }
    return 0;
 }
